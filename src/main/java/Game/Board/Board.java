@@ -3,6 +3,8 @@ package Game.Board;
 import Game.phrase.Phrase;
 import Game.team.Team;
 
+import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -12,6 +14,7 @@ public class Board {
     private int sumOfScoreGuessedPhrases = 0;
     private final Team redTeam;
     private final Team blueTeam;
+    private final List<Phrase> finalAnswer = new ArrayList<>();
 
     public Board(List<Phrase> initializeWords, Team redTeam, Team blueTeam) {
         for (Phrase phrase : initializeWords) {
@@ -29,6 +32,17 @@ public class Board {
             }
         }
         if (score == 0) return;
+        sumOfScoreGuessedPhrases += score;
+        guessed.put(new Phrase(phrase, score), true);
+    }
+
+    public void setGuessedFinal(String phrase) {
+        int score = 0;
+        for (Phrase p : guessed.keySet()) {
+            if (p.getPhrase().equals(phrase)) {
+                score = p.getScore();
+            }
+        }
         sumOfScoreGuessedPhrases += score;
         guessed.put(new Phrase(phrase, score), true);
     }
@@ -63,6 +77,42 @@ public class Board {
         System.out.printf("             Suma: %d\n", sumOfScoreGuessedPhrases);
         System.out.printf("%s:%d %s     %s:%d %s\n",
                 blueTeam.getName(), blueTeam.getPoints(), "X".repeat(blueTeam.getBadGuessesCounter()),
-                redTeam.getName(), redTeam.getPoints(),"X".repeat(redTeam.getBadGuessesCounter()));
+                redTeam.getName(), redTeam.getPoints(), "X".repeat(redTeam.getBadGuessesCounter()));
+    }
+
+    public void printBoardFinal(String input, int score) {
+        String notGuessedPlaceholderLeft = "------------------ ##";
+        String notGuessedPlaceholderRight = "## ------------------";
+        finalAnswer.add(new Phrase(input, score));
+
+
+        for (int i = 0; i < 6; i++) {
+            StringBuilder stringBuilder = new StringBuilder();
+            if (i < finalAnswer.size()) {
+                Phrase answerLeft = finalAnswer.get(i);
+                int phraseRightPadding = notGuessedPlaceholderLeft.length() - answerLeft.getPhrase().length() - 1;
+                if (score / 10 >= 1) {
+                    phraseRightPadding -= 1;
+                }
+                stringBuilder.append(answerLeft.getPhrase());
+                stringBuilder.append(" ".repeat(Math.max(0, phraseRightPadding)));
+                stringBuilder.append(answerLeft.getScore());
+                stringBuilder.append(" ".repeat(4));
+                System.out.printf("%s", stringBuilder);
+            } else {
+                stringBuilder.append(notGuessedPlaceholderLeft);
+                stringBuilder.append(" ".repeat(4));
+
+                System.out.printf("%s", stringBuilder);
+            }
+
+            if (i + 6 < finalAnswer.size()) {
+                Phrase answerRight = finalAnswer.get(i + 6);
+                System.out.printf("%s", answerRight);
+            } else {
+                System.out.printf("%s", notGuessedPlaceholderRight);
+            }
+            System.out.println();
+        }
     }
 }

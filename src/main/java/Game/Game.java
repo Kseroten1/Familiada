@@ -35,9 +35,9 @@ public class Game {
         return scanner.nextLine();
     }
 
-    public int guess(String guess){
-        for (Phrase p:phrases){
-            if(guess.equals(p.getPhrase())){
+    public int guess(String guess) {
+        for (Phrase p : phrases) {
+            if (guess.equals(p.getPhrase())) {
                 board.setGuessed(guess);
                 return p.getScore();
             }
@@ -45,7 +45,18 @@ public class Game {
         return 0;
     }
 
+    public int guessFinal(String guess) {
+        for (Phrase p : phrases) {
+            if (guess.equals(p.getPhrase())) {
+                board.setGuessedFinal(guess);
+                return p.getScore();
+            }
+        }
+        return 0;
+    }
+
     public void determineTurn() {
+        board.printBoard();
         Scanner scanner = new Scanner(System.in);
         System.out.println("Która drużyna podaje hasło:");
         String whichTeamFirst = scanner.nextLine();
@@ -64,7 +75,7 @@ public class Game {
         guess = scanner.nextLine();
         int secondScore = guess(guess);
 
-        if (firstScore > secondScore){
+        if (firstScore > secondScore) {
             redTurn = whichTeamFirst.equals("red");
         }
         board.printBoard();
@@ -111,27 +122,74 @@ public class Game {
 
         redTurn = !redTurn;
         currentTeam = redTurn ? redTeam : blueTeam;
+        currentTeam.addPoints(currentScore);
         System.out.printf("Ture wygrywa drużyna %s!\n", currentTeam.getName());
+    }
+
+    public void finalGuesses() {
+        String input = "";
+        int inputScore = 0;
+        List<List<Phrase>> listOfPhraseListFinal = new ArrayList<>();
+        List<Phrase> test1 = new ArrayList<>();
+        test1.add(new Phrase("1", 22));
+        test1.add(new Phrase("2", 10));
+        test1.add(new Phrase("3", 8));
+        test1.add(new Phrase("4", 5));
+        test1.add(new Phrase("5", 4));
+        test1.add(new Phrase("6", 3));
+        listOfPhraseListFinal.add(test1);
+        List<Phrase> test2 = new ArrayList<>();
+        test2.add(new Phrase("11", 22));
+        test2.add(new Phrase("22", 10));
+        test2.add(new Phrase("33", 8));
+        test2.add(new Phrase("44", 5));
+        test2.add(new Phrase("55", 4));
+        test2.add(new Phrase("66", 3));
+        listOfPhraseListFinal.add(test2);
+        List<Phrase> test3 = new ArrayList<>();
+        test3.add(new Phrase("111", 22));
+        test3.add(new Phrase("222", 10));
+        test3.add(new Phrase("333", 8));
+        test3.add(new Phrase("444", 5));
+        test3.add(new Phrase("555", 4));
+        test3.add(new Phrase("666", 3));
+        listOfPhraseListFinal.add(test3);
+        ListIterator<List<Phrase>> iter = listOfPhraseListFinal.listIterator();
+
+        for (int i = 0; i < 12; i++) {
+            setPhrases(iter.next());
+            input = scanner.nextLine();
+            inputScore = guessFinal(input);
+            board.printBoardFinal(input, inputScore);
+        }
     }
 
     public void playGame() {
         List<List<Phrase>> listOfPhraseList = new ArrayList<>();
         List<Phrase> test = new ArrayList<>();
-        test.add(new Phrase("spacer", 10));
-        test.add(new Phrase("muzyka", 8));
-        test.add(new Phrase("zakupy", 7));
-        test.add(new Phrase("kąpiel", 6));
-        test.add(new Phrase("spotkanie z przyjaciółmi", 5));
-        test.add(new Phrase("sport", 4));
+        test.add(new Phrase("spacer", 250));
+        test.add(new Phrase("muzyka", 10));
+        test.add(new Phrase("zakupy", 6));
+        test.add(new Phrase("kąpiel", 5));
+        test.add(new Phrase("spotkanie z przyjaciółmi", 4));
+        test.add(new Phrase("sport", 3));
         listOfPhraseList.add(test);
         List<Phrase> test1 = new ArrayList<>();
-        test1.add(new Phrase("spacerki", 10));
-        test1.add(new Phrase("muzyczka", 8));
-        test1.add(new Phrase("zakupki", 7));
-        test1.add(new Phrase("kąpielki", 6));
-        test1.add(new Phrase("spotkanie z przyjaciółkami", 5));
-        test1.add(new Phrase("sportowe", 4));
+        test1.add(new Phrase("spacerki", 22));
+        test1.add(new Phrase("muzyczka", 10));
+        test1.add(new Phrase("zakupki", 8));
+        test1.add(new Phrase("kąpielki", 5));
+        test1.add(new Phrase("spotkanie z przyjaciółkami", 4));
+        test1.add(new Phrase("sportowe", 3));
         listOfPhraseList.add(test1);
+        List<Phrase> test2 = new ArrayList<>();
+        test1.add(new Phrase("1", 22));
+        test1.add(new Phrase("2", 10));
+        test1.add(new Phrase("3", 8));
+        test1.add(new Phrase("4", 5));
+        test1.add(new Phrase("5", 4));
+        test1.add(new Phrase("6", 3));
+        listOfPhraseList.add(test2);
 
         ListIterator<List<Phrase>> iter = listOfPhraseList.listIterator();
         while (redTeam.getPoints() < 200 && blueTeam.getPoints() < 200) {
@@ -145,5 +203,6 @@ public class Game {
             redTeam.resetBadGuessCounter();
             blueTeam.resetBadGuessCounter();
         }
+        finalGuesses();
     }
 }
