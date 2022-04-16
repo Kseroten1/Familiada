@@ -77,6 +77,8 @@ public class Game {
 
         if (firstScore > secondScore) {
             redTurn = whichTeamFirst.equals("red");
+        } else {
+            redTurn = false;
         }
         board.printBoard();
         if(firstScore == 0 && secondScore == 0){

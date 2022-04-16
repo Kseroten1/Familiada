@@ -26,6 +26,11 @@ public class Phrase implements Comparable<Phrase> {
     }
 
     @Override
+    public boolean equals(Object o) {
+        return phrase.equals(o);
+    }
+
+    @Override
     public String toString() {
         return String.format("%s (%dp)", phrase, score);
     }
