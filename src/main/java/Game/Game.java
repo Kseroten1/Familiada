@@ -45,14 +45,14 @@ public class Game {
         return 0;
     }
 
-    public int guessFinal(String guess) {
+    public void guessFinal(String guess) {
+        int score = 0;
         for (Phrase p : phrases) {
             if (guess.equals(p.getPhrase())) {
-                board.setGuessedFinal(guess);
-                return p.getScore();
+                score = p.getScore();
             }
         }
-        return 0;
+        board.setGuessedFinal(guess, score);
     }
 
     public void determineTurn() {
@@ -91,10 +91,8 @@ public class Game {
         int currentScore = board.getCurrentScore();
         int checkingScore = 0;
         String guess = "";
-        System.out.println(sumOfPoints);
         while (currentTeam.getBadGuessesCounter() < 3 && sumOfPoints != currentScore) {
             System.out.printf("Tura drużyny %s\n", currentTeam.getName());
-            System.out.println(currentScore);
             guess = scanner.nextLine();
             checkingScore = guess(guess);
             if (checkingScore == 0) {
@@ -127,71 +125,124 @@ public class Game {
         currentTeam.addPoints(currentScore);
         System.out.printf("Ture wygrywa drużyna %s!\n", currentTeam.getName());
     }
-
     public void finalGuesses() {
         String input = "";
         int inputScore = 0;
         List<List<Phrase>> listOfPhraseListFinal = new ArrayList<>();
         List<Phrase> test1 = new ArrayList<>();
-        test1.add(new Phrase("1", 22));
-        test1.add(new Phrase("2", 10));
-        test1.add(new Phrase("3", 8));
-        test1.add(new Phrase("4", 5));
-        test1.add(new Phrase("5", 4));
-        test1.add(new Phrase("6", 3));
+        test1.add(new Phrase("kawe", 30));
+        test1.add(new Phrase("herbate", 25));
+        test1.add(new Phrase("kakao", 19));
+        test1.add(new Phrase("sok", 16));
+        test1.add(new Phrase("mleko", 13));
+        test1.add(new Phrase("wode", 10));
         listOfPhraseListFinal.add(test1);
         List<Phrase> test2 = new ArrayList<>();
-        test2.add(new Phrase("11", 22));
-        test2.add(new Phrase("22", 10));
-        test2.add(new Phrase("33", 8));
-        test2.add(new Phrase("44", 5));
-        test2.add(new Phrase("55", 4));
-        test2.add(new Phrase("66", 3));
+        test2.add(new Phrase("jabłko", 28));
+        test2.add(new Phrase("gruszka", 24));
+        test2.add(new Phrase("śliwka", 22));
+        test2.add(new Phrase("winogrono", 18));
+        test2.add(new Phrase("brzoskwinia", 15));
+        test2.add(new Phrase("nektarynka", 12));
         listOfPhraseListFinal.add(test2);
         List<Phrase> test3 = new ArrayList<>();
-        test3.add(new Phrase("111", 22));
-        test3.add(new Phrase("222", 10));
-        test3.add(new Phrase("333", 8));
-        test3.add(new Phrase("444", 5));
-        test3.add(new Phrase("555", 4));
-        test3.add(new Phrase("666", 3));
+        test3.add(new Phrase("na krześle", 27));
+        test3.add(new Phrase("na ławce", 25));
+        test3.add(new Phrase("na fotelu", 21));
+        test3.add(new Phrase("na kanapie", 19));
+        test3.add(new Phrase("na trawie", 14));
+        test3.add(new Phrase("na kocu", 10));
         listOfPhraseListFinal.add(test3);
+        List<Phrase> test4 = new ArrayList<>();
+        test4.add(new Phrase("słońce", 30));
+        test4.add(new Phrase("banan", 25));
+        test4.add(new Phrase("cytryna", 23));
+        test4.add(new Phrase("farba", 20));
+        test4.add(new Phrase("koszulka", 16));
+        test4.add(new Phrase("kwiat", 12));
+        listOfPhraseListFinal.add(test4);
+        List<Phrase> test5 = new ArrayList<>();
+        test5.add(new Phrase("konewka", 25));
+        test5.add(new Phrase("kran", 20));
+        test5.add(new Phrase("kwiaty", 18));
+        test5.add(new Phrase("kretowisko", 16));
+        test5.add(new Phrase("konwalia", 14));
+        test5.add(new Phrase("krzewy", 12));
+        listOfPhraseListFinal.add(test5);
+        List<Phrase> test6 = new ArrayList<>();
+        test6.add(new Phrase("portfel", 30));
+        test6.add(new Phrase("parasol", 25));
+        test6.add(new Phrase("dokumenty", 20));
+        test6.add(new Phrase("klucze", 15));
+        test6.add(new Phrase("skarpetke", 10));
+        test6.add(new Phrase("kolczyk", 5));
+        listOfPhraseListFinal.add(test6);
         ListIterator<List<Phrase>> iter = listOfPhraseListFinal.listIterator();
 
         for (int i = 0; i < 12; i++) {
+            if (i == 6) {
+                for (int j = 0; j < 6; j++) {
+                    setPhrases(iter.previous());
+                }
+            }
             setPhrases(iter.next());
             input = scanner.nextLine();
-            inputScore = guessFinal(input);
-            board.printBoardFinal(input, inputScore);
+            guessFinal(input);
+            board.printBoardFinal();
         }
     }
 
     public void playGame() {
         List<List<Phrase>> listOfPhraseList = new ArrayList<>();
         List<Phrase> test = new ArrayList<>();
-        test.add(new Phrase("spacer", 250));
-        test.add(new Phrase("muzyka", 10));
-        test.add(new Phrase("zakupy", 6));
-        test.add(new Phrase("kąpiel", 5));
-        test.add(new Phrase("spotkanie z przyjaciółmi", 4));
-        test.add(new Phrase("sport", 3));
+        test.add(new Phrase("żywica", 25));
+        test.add(new Phrase("guma", 20));
+        test.add(new Phrase("miód", 18));
+        test.add(new Phrase("syrop", 13));
+        test.add(new Phrase("klej", 8));
+        test.add(new Phrase("landrynka", 5));
         listOfPhraseList.add(test);
         List<Phrase> test1 = new ArrayList<>();
-        test1.add(new Phrase("spacerki", 22));
-        test1.add(new Phrase("muzyczka", 10));
-        test1.add(new Phrase("zakupki", 8));
-        test1.add(new Phrase("kąpielki", 5));
-        test1.add(new Phrase("spotkanie z przyjaciółkami", 4));
-        test1.add(new Phrase("sportowe", 3));
+        test1.add(new Phrase("sarna", 23));
+        test1.add(new Phrase("zając", 19));
+        test1.add(new Phrase("dzik", 16));
+        test1.add(new Phrase("bocian", 12));
+        test1.add(new Phrase("czapla", 10));
+        test1.add(new Phrase("lis", 4));
         listOfPhraseList.add(test1);
         List<Phrase> test2 = new ArrayList<>();
-        test1.add(new Phrase("1", 22));
-        test1.add(new Phrase("2", 10));
-        test1.add(new Phrase("3", 8));
-        test1.add(new Phrase("4", 5));
-        test1.add(new Phrase("5", 4));
-        test1.add(new Phrase("6", 3));
+        test2.add(new Phrase("spodnie", 24));
+        test2.add(new Phrase("skarpety", 18));
+        test2.add(new Phrase("spódnica", 15));
+        test2.add(new Phrase("sukienka", 14));
+        test2.add(new Phrase("sweter", 9));
+        test2.add(new Phrase("szalik", 6));
         listOfPhraseList.add(test2);
+        List<Phrase> test3 = new ArrayList<>();
+        test3.add(new Phrase("borowiki", 27));
+        test3.add(new Phrase("podgrzybki", 16));
+        test3.add(new Phrase("kurki", 14));
+        test3.add(new Phrase("sowy", 10));
+        test3.add(new Phrase("rydze", 7));
+        test3.add(new Phrase("maślaki", 3));
+        listOfPhraseList.add(test3);
+        List<Phrase> test4 = new ArrayList<>();
+        test4.add(new Phrase("okna", 24));
+        test4.add(new Phrase("drzwi", 21));
+        test4.add(new Phrase("toaleta", 16));
+        test4.add(new Phrase("fotel", 13));
+        test4.add(new Phrase("stolik", 8));
+        test4.add(new Phrase("korytarz", 5));
+        listOfPhraseList.add(test4);
+        List<Phrase> test5 = new ArrayList<>();
+        test5.add(new Phrase("sum", 30));
+        test5.add(new Phrase("pies", 30));
+        test5.add(new Phrase("kot", 30));
+        test5.add(new Phrase("mysz", 30));
+        test5.add(new Phrase("foka", 30));
+        test5.add(new Phrase("wiewiórka", 30));
+        listOfPhraseList.add(test5);
+
 
         ListIterator<List<Phrase>> iter = listOfPhraseList.listIterator();
         while (redTeam.getPoints() < 200 && blueTeam.getPoints() < 200) {
